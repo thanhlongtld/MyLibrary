@@ -48,7 +48,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/collapsedRelLayout"
-            android:visibility="gone">
+            android:visibility="visible">
 
             <TextView
                 android:id="@+id/authorText"
@@ -78,17 +78,7 @@
                 android:layout_below="@+id/txtShortDesc"
                 android:layout_alignParentRight="true"
                 android:src="@drawable/ic_up_arr" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Delete"
-                android:layout_below="@id/txtShortDesc"
-                android:layout_toLeftOf="@+id/btnUpArrow"
-                android:layout_marginRight="7dp"
-                android:textColor="@color/pink"
-                android:id="@+id/btnDelete"
-                android:visibility="gone"
-                />
+
         </RelativeLayout>
 
     </RelativeLayout>

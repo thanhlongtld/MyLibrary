@@ -18,7 +18,7 @@ public class BookActivity extends AppCompatActivity {
     private String BOOK_ID_KEY = "bookID";
 
     private TextView txtBookName, txtAuthor, txtPages, txtDescription;
-    private Button btnAddToWantToRead, btnAddToAlreadyRead, btnAddToCurrentlyReading, btnAddToFavorite;
+    private Button btnAddToWantToRead, btnAddToAlreadyRead, btnAddToCurrentlyReading, btnAddToFavorite, btnReadBook;
     private ImageView bookImage;
 
     @Override
@@ -41,6 +41,7 @@ public class BookActivity extends AppCompatActivity {
                     handleWantToReadBooks(incomingBook);
                     handleFavoriteBoooks(incomingBook);
                     handleCurrentlyReadingBooks(incomingBook);
+                    handleReadBook(incomingBook);
                 }
             }
         }
@@ -56,7 +57,17 @@ public class BookActivity extends AppCompatActivity {
             }
         }
         if (existInCurrentlyReadingBooks) {
-            btnAddToCurrentlyReading.setEnabled(false);
+            btnAddToCurrentlyReading.setBackgroundColor(getResources().getColor(R.color.pink));
+            btnAddToCurrentlyReading.setText("Delete From Currently Reading");
+            btnAddToCurrentlyReading.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Utils.getInstance(BookActivity.this).removeFromCurrentlyReading(book)){
+                        Toast.makeText(BookActivity.this, "Remove From Currently Reading Successfully", Toast.LENGTH_SHORT).show();
+                        btnAddToCurrentlyReading.setBackgroundColor(getResources().getColor(R.color.));
+                    }
+                }
+            });
         } else {
             btnAddToCurrentlyReading.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -151,6 +162,17 @@ public class BookActivity extends AppCompatActivity {
         }
     }
 
+    private void handleReadBook(final Book book) {
+        btnReadBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent readBookIntent = new Intent(BookActivity.this, WebsiteActivity.class);
+                readBookIntent.putExtra("url", book.getUrl());
+                startActivity(readBookIntent);
+            }
+        });
+    }
+
     private void setData(Book book) {
         txtBookName.setText(book.getName());
         txtAuthor.setText(book.getAuthor());
@@ -174,5 +196,6 @@ public class BookActivity extends AppCompatActivity {
         btnAddToWantToRead = findViewById(R.id.btnAddToWishList);
 
         bookImage = findViewById(R.id.imgBook);
+        btnReadBook = findViewById(R.id.btnReadBook);
     }
 }

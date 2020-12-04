@@ -9,7 +9,9 @@ public class Book {
     private String shortDescription;
     private String longDescription;
     private boolean isExpanded;
-    public Book(int id, String name, String author, int pages, String imgUrl, String shortDescription, String longDescription) {
+    private String url;
+
+    public Book(int id, String name, String author, int pages, String imgUrl, String shortDescription, String longDescription, String url) {
         this.id = id;
         this.name = name;
         this.author = author;
@@ -17,7 +19,7 @@ public class Book {
         this.imgUrl = imgUrl;
         this.shortDescription = shortDescription;
         this.longDescription = longDescription;
-        this.isExpanded=false;
+        this.url = url;
     }
 
     public boolean isExpanded() {
@@ -82,6 +84,14 @@ public class Book {
 
     public void setLongDescription(String longDescription) {
         this.longDescription = longDescription;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     @Override

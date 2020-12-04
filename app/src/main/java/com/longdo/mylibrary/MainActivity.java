@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -69,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Intent intent= new Intent(MainActivity.this, WebsiteActivity.class);
-                        intent.putExtra("url","https://google.com");
+                        intent.putExtra("url", "https://drive.google.com/file/d/1DkCIC5-krt8N2kUv58-40qlPnjDRPbx1/view");
                         startActivity(intent);
                     }
                 });
