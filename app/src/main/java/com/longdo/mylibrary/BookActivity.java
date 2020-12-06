@@ -64,7 +64,8 @@ public class BookActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     if (Utils.getInstance(BookActivity.this).removeFromCurrentlyReading(book)){
                         Toast.makeText(BookActivity.this, "Remove From Currently Reading Successfully", Toast.LENGTH_SHORT).show();
-                        btnAddToCurrentlyReading.setBackgroundColor(getResources().getColor(R.color.));
+                        btnAddToCurrentlyReading.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                        btnAddToCurrentlyReading.setText("Currently Reading");
                     }
                 }
             });
@@ -93,7 +94,18 @@ public class BookActivity extends AppCompatActivity {
             }
         }
         if (existInFavoriteBooks) {
-            btnAddToFavorite.setEnabled(false);
+            btnAddToFavorite.setText("Delete From Favorite");
+            btnAddToFavorite.setBackgroundColor(getResources().getColor(R.color.pink));
+            btnAddToFavorite.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Utils.getInstance(BookActivity.this).removeFromFavorite(book)){
+                        Toast.makeText(BookActivity.this, "Delete from favorite successfully", Toast.LENGTH_SHORT).show();
+                        btnAddToFavorite.setText("Add To Favorites");
+                        btnAddToFavorite.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    }
+                }
+            });
         } else {
             btnAddToFavorite.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -119,7 +131,18 @@ public class BookActivity extends AppCompatActivity {
             }
         }
         if (existInWantToReadBooks) {
-            btnAddToWantToRead.setEnabled(false);
+            btnAddToWantToRead.setText("Delete From Wish List");
+            btnAddToWantToRead.setBackgroundColor(getResources().getColor(R.color.pink));
+            btnAddToWantToRead.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Utils.getInstance(BookActivity.this).removeFromWantToRead(book)){
+                        Toast.makeText(BookActivity.this, "Delete From Wish List Successfully", Toast.LENGTH_SHORT).show();
+                        btnAddToWantToRead.setText("Want To Read");
+                        btnAddToWantToRead.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    }
+                }
+            });
         } else {
             btnAddToWantToRead.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -145,7 +168,18 @@ public class BookActivity extends AppCompatActivity {
             }
         }
         if (existInAlreadyBooks) {
-            btnAddToAlreadyRead.setEnabled(false);
+            btnAddToAlreadyRead.setText("Delete From Already Read");
+            btnAddToAlreadyRead.setBackgroundColor(getResources().getColor(R.color.pink));
+            btnAddToAlreadyRead.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (Utils.getInstance(BookActivity.this).removeFromAlreadyRead(book)){
+                        Toast.makeText(BookActivity.this, "Remove From Already Read Successfully", Toast.LENGTH_SHORT).show();
+                        btnAddToAlreadyRead.setText("Already Read");
+                        btnAddToAlreadyRead.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                    }
+                }
+            });
         } else {
             btnAddToAlreadyRead.setOnClickListener(new View.OnClickListener() {
                 @Override

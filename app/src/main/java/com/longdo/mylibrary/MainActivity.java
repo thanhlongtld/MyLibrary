@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
-    private Button btnAllBooks, btnAlreadyRead, btnWantToRead, btnCurrentlyReading, btnFavorite, btnAbout;
+    private Button btnAllBooks, btnAlreadyRead, btnWantToRead, btnCurrentlyReading, btnFavorite, btnAbout, btnCreateBook;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,6 +78,13 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         Utils.getInstance(this);
+        btnCreateBook.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, BookFormActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     private void initViews() {
@@ -87,5 +94,6 @@ public class MainActivity extends AppCompatActivity {
         btnCurrentlyReading = findViewById(R.id.btnCurrentlyReading);
         btnFavorite = findViewById(R.id.btnFavorite);
         btnAbout = findViewById(R.id.btnAbout);
+        btnCreateBook= findViewById(R.id.btnCreateBook);
     }
 }

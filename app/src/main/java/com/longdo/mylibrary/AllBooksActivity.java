@@ -6,14 +6,19 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 public class AllBooksActivity extends AppCompatActivity {
     private RecyclerView booksRecView;
     private BookRecViewAdapter adapter;
+    private ImageView searchButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +34,16 @@ public class AllBooksActivity extends AppCompatActivity {
 
 
         adapter.setBooks(Utils.getInstance(this).getAllBooks());
+
+        searchButton= findViewById(R.id.searchButton);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent= new Intent(AllBooksActivity.this, SearchActivity.class);
+                intent.putExtra("classify","allBooks");
+                startActivity(intent);
+            }
+        });
     }
 
     @Override

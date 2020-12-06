@@ -2,6 +2,9 @@ package com.longdo.mylibrary;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -259,4 +262,88 @@ public class Utils {
         }
         return false;
     }
+
+    public int getIdForNewBook() {
+        Gson gson = new Gson();
+        Type type = new TypeToken<ArrayList<Book>>() {
+        }.getType();
+
+        ArrayList<Book> books = gson.fromJson(sharedPreferences.getString(ALL_BOOKS_KEY, null), type);
+        return (books != null) ? books.size() + 1 : 1;
+    }
+
+    public boolean addToAllBook(Book book){
+        ArrayList<Book> books= getAllBooks();
+        if (null!= books){
+            if (books.add(book)){
+                Gson gson = new Gson();
+                SharedPreferences.Editor editor= sharedPreferences.edit();
+                editor.remove(ALL_BOOKS_KEY);
+                editor.putString(ALL_BOOKS_KEY, gson.toJson(books));
+                editor.commit();
+                return true;
+            }
+        }
+        return false;
+    }
+    public ArrayList<Book> getFromAllBooksByName(String name){
+        ArrayList<Book> result= new ArrayList<Book>();
+        ArrayList<Book> books= getAllBooks();
+        String lowerName= name.toLowerCase();
+        for (Book b: books){
+            if (b.getName().toLowerCase().contains(lowerName)){
+                result.add(b);
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<Book> getFromAlreadyReadBooksByName(String name){
+        ArrayList<Book> result= new ArrayList<Book>();
+        ArrayList<Book> books= getAlreadyReadBook();
+        String lowerName= name.toLowerCase();
+        for (Book b: books){
+            if (b.getName().toLowerCase().contains(lowerName)){
+                result.add(b);
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<Book> getFromCurrentlyReadingBooksByName(String name){
+        ArrayList<Book> result= new ArrayList<Book>();
+        ArrayList<Book> books= getCurrentlyReadingBooks();
+        String lowerName= name.toLowerCase();
+        for (Book b: books){
+            if (b.getName().toLowerCase().contains(lowerName)){
+                result.add(b);
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<Book> getFromFavoriteBooksByName(String name){
+        ArrayList<Book> result= new ArrayList<Book>();
+        ArrayList<Book> books= getFavoriteBooks();
+        String lowerName= name.toLowerCase();
+        for (Book b: books){
+            if (b.getName().toLowerCase().contains(lowerName)){
+                result.add(b);
+            }
+        }
+        return result;
+    }
+
+    public ArrayList<Book> getFromWantToReadBooksByName(String name){
+        ArrayList<Book> result= new ArrayList<Book>();
+        ArrayList<Book> books= getWantToReadBooks();
+        String lowerName= name.toLowerCase();
+        for (Book b: books){
+            if (b.getName().toLowerCase().contains(lowerName)){
+                result.add(b);
+            }
+        }
+        return result;
+    }
+
 }
