@@ -3,6 +3,7 @@ package com.longdo.mylibrary;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.webkit.WebView;
 
 import androidx.annotation.RequiresApi;
 
@@ -11,6 +12,7 @@ import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Utils {
     private static Utils instance;
@@ -272,12 +274,12 @@ public class Utils {
         return (books != null) ? books.size() + 1 : 1;
     }
 
-    public boolean addToAllBook(Book book){
-        ArrayList<Book> books= getAllBooks();
-        if (null!= books){
-            if (books.add(book)){
+    public boolean addToAllBook(Book book) {
+        ArrayList<Book> books = getAllBooks();
+        if (null != books) {
+            if (books.add(book)) {
                 Gson gson = new Gson();
-                SharedPreferences.Editor editor= sharedPreferences.edit();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.remove(ALL_BOOKS_KEY);
                 editor.putString(ALL_BOOKS_KEY, gson.toJson(books));
                 editor.commit();
@@ -286,64 +288,153 @@ public class Utils {
         }
         return false;
     }
-    public ArrayList<Book> getFromAllBooksByName(String name){
-        ArrayList<Book> result= new ArrayList<Book>();
-        ArrayList<Book> books= getAllBooks();
-        String lowerName= name.toLowerCase();
-        for (Book b: books){
-            if (b.getName().toLowerCase().contains(lowerName)){
+
+    public ArrayList<Book> getFromAllBooksByName(String name) {
+        ArrayList<Book> result = new ArrayList<Book>();
+        ArrayList<Book> books = getAllBooks();
+        String lowerName = name.toLowerCase();
+        for (Book b : books) {
+            if (b.getName().toLowerCase().contains(lowerName)) {
                 result.add(b);
             }
         }
         return result;
     }
 
-    public ArrayList<Book> getFromAlreadyReadBooksByName(String name){
-        ArrayList<Book> result= new ArrayList<Book>();
-        ArrayList<Book> books= getAlreadyReadBook();
-        String lowerName= name.toLowerCase();
-        for (Book b: books){
-            if (b.getName().toLowerCase().contains(lowerName)){
+    public ArrayList<Book> getFromAlreadyReadBooksByName(String name) {
+        ArrayList<Book> result = new ArrayList<Book>();
+        ArrayList<Book> books = getAlreadyReadBook();
+        String lowerName = name.toLowerCase();
+        for (Book b : books) {
+            if (b.getName().toLowerCase().contains(lowerName)) {
                 result.add(b);
             }
         }
         return result;
     }
 
-    public ArrayList<Book> getFromCurrentlyReadingBooksByName(String name){
-        ArrayList<Book> result= new ArrayList<Book>();
-        ArrayList<Book> books= getCurrentlyReadingBooks();
-        String lowerName= name.toLowerCase();
-        for (Book b: books){
-            if (b.getName().toLowerCase().contains(lowerName)){
+    public ArrayList<Book> getFromCurrentlyReadingBooksByName(String name) {
+        ArrayList<Book> result = new ArrayList<Book>();
+        ArrayList<Book> books = getCurrentlyReadingBooks();
+        String lowerName = name.toLowerCase();
+        for (Book b : books) {
+            if (b.getName().toLowerCase().contains(lowerName)) {
                 result.add(b);
             }
         }
         return result;
     }
 
-    public ArrayList<Book> getFromFavoriteBooksByName(String name){
-        ArrayList<Book> result= new ArrayList<Book>();
-        ArrayList<Book> books= getFavoriteBooks();
-        String lowerName= name.toLowerCase();
-        for (Book b: books){
-            if (b.getName().toLowerCase().contains(lowerName)){
+    public ArrayList<Book> getFromFavoriteBooksByName(String name) {
+        ArrayList<Book> result = new ArrayList<Book>();
+        ArrayList<Book> books = getFavoriteBooks();
+        String lowerName = name.toLowerCase();
+        for (Book b : books) {
+            if (b.getName().toLowerCase().contains(lowerName)) {
                 result.add(b);
             }
         }
         return result;
     }
 
-    public ArrayList<Book> getFromWantToReadBooksByName(String name){
-        ArrayList<Book> result= new ArrayList<Book>();
-        ArrayList<Book> books= getWantToReadBooks();
-        String lowerName= name.toLowerCase();
-        for (Book b: books){
-            if (b.getName().toLowerCase().contains(lowerName)){
+    public ArrayList<Book> getFromWantToReadBooksByName(String name) {
+        ArrayList<Book> result = new ArrayList<Book>();
+        ArrayList<Book> books = getWantToReadBooks();
+        String lowerName = name.toLowerCase();
+        for (Book b : books) {
+            if (b.getName().toLowerCase().contains(lowerName)) {
                 result.add(b);
             }
         }
         return result;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public boolean deleteBookByID(int id) {
+
+        ArrayList<Book> allBooks = getAllBooks();
+        ArrayList<Book> alreadyReadBooks = getAlreadyReadBook();
+        ArrayList<Book> currentlyReading = getCurrentlyReadingBooks();
+        ArrayList<Book> favoriteBooks = getFavoriteBooks();
+        ArrayList<Book> wantToReadBooks = getWantToReadBooks();
+
+        allBooks.removeIf(n -> n.getId() == id);
+        if (!setAllBooks(allBooks)) {
+            return false;
+        }
+        ;
+        alreadyReadBooks.removeIf(n -> n.getId() == id);
+        if (!setAlreadyBooks(alreadyReadBooks)) return false;
+
+        currentlyReading.removeIf(n -> n.getId() == id);
+        if (!setCurrentlyReading(currentlyReading)) return false;
+
+        favoriteBooks.removeIf(n -> n.getId() == id);
+        if (!setFavoriteBooks(favoriteBooks)) return false;
+
+        wantToReadBooks.removeIf(n -> n.getId() == id);
+        if (!setWantToReadBooks(wantToReadBooks)) return false;
+
+        return true;
+    }
+
+    public boolean setAllBooks(ArrayList<Book> books) {
+        if (null != books) {
+            Gson gson = new Gson();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(ALL_BOOKS_KEY);
+            editor.putString(ALL_BOOKS_KEY, gson.toJson(books));
+            editor.commit();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean setAlreadyBooks(ArrayList<Book> books) {
+        if (null != books) {
+            Gson gson = new Gson();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(ALREADY_READ_BOOKS);
+            editor.putString(ALREADY_READ_BOOKS, gson.toJson(books));
+            editor.commit();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean setCurrentlyReading(ArrayList<Book> books) {
+        if (null != books) {
+            Gson gson = new Gson();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(CURRENTLY_READING_BOOKS);
+            editor.putString(CURRENTLY_READING_BOOKS, gson.toJson(books));
+            editor.commit();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean setFavoriteBooks(ArrayList<Book> books) {
+        if (null != books) {
+            Gson gson = new Gson();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(FAVORITE_BOOKS);
+            editor.putString(FAVORITE_BOOKS, gson.toJson(books));
+            editor.commit();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean setWantToReadBooks(ArrayList<Book> books) {
+        if (null != books) {
+            Gson gson = new Gson();
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.remove(WANT_TO_READ_BOOKS);
+            editor.putString(WANT_TO_READ_BOOKS, gson.toJson(books));
+            editor.commit();
+            return true;
+        }
+        return false;
+    }
 }

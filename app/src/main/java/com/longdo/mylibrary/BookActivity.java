@@ -1,8 +1,10 @@
 package com.longdo.mylibrary;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +20,7 @@ public class BookActivity extends AppCompatActivity {
     private String BOOK_ID_KEY = "bookID";
 
     private TextView txtBookName, txtAuthor, txtPages, txtDescription;
-    private Button btnAddToWantToRead, btnAddToAlreadyRead, btnAddToCurrentlyReading, btnAddToFavorite, btnReadBook;
+    private Button btnAddToWantToRead, btnAddToAlreadyRead, btnAddToCurrentlyReading, btnAddToFavorite, btnReadBook, btnDelete, btnUpdate;
     private ImageView bookImage;
 
     @Override
@@ -42,6 +44,7 @@ public class BookActivity extends AppCompatActivity {
                     handleFavoriteBoooks(incomingBook);
                     handleCurrentlyReadingBooks(incomingBook);
                     handleReadBook(incomingBook);
+                    handleDeleteBook(incomingBook);
                 }
             }
         }
@@ -62,7 +65,7 @@ public class BookActivity extends AppCompatActivity {
             btnAddToCurrentlyReading.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (Utils.getInstance(BookActivity.this).removeFromCurrentlyReading(book)){
+                    if (Utils.getInstance(BookActivity.this).removeFromCurrentlyReading(book)) {
                         Toast.makeText(BookActivity.this, "Remove From Currently Reading Successfully", Toast.LENGTH_SHORT).show();
                         btnAddToCurrentlyReading.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                         btnAddToCurrentlyReading.setText("Currently Reading");
@@ -99,7 +102,7 @@ public class BookActivity extends AppCompatActivity {
             btnAddToFavorite.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (Utils.getInstance(BookActivity.this).removeFromFavorite(book)){
+                    if (Utils.getInstance(BookActivity.this).removeFromFavorite(book)) {
                         Toast.makeText(BookActivity.this, "Delete from favorite successfully", Toast.LENGTH_SHORT).show();
                         btnAddToFavorite.setText("Add To Favorites");
                         btnAddToFavorite.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -136,7 +139,7 @@ public class BookActivity extends AppCompatActivity {
             btnAddToWantToRead.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (Utils.getInstance(BookActivity.this).removeFromWantToRead(book)){
+                    if (Utils.getInstance(BookActivity.this).removeFromWantToRead(book)) {
                         Toast.makeText(BookActivity.this, "Delete From Wish List Successfully", Toast.LENGTH_SHORT).show();
                         btnAddToWantToRead.setText("Want To Read");
                         btnAddToWantToRead.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -173,7 +176,7 @@ public class BookActivity extends AppCompatActivity {
             btnAddToAlreadyRead.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (Utils.getInstance(BookActivity.this).removeFromAlreadyRead(book)){
+                    if (Utils.getInstance(BookActivity.this).removeFromAlreadyRead(book)) {
                         Toast.makeText(BookActivity.this, "Remove From Already Read Successfully", Toast.LENGTH_SHORT).show();
                         btnAddToAlreadyRead.setText("Already Read");
                         btnAddToAlreadyRead.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -207,6 +210,23 @@ public class BookActivity extends AppCompatActivity {
         });
     }
 
+    private void handleDeleteBook(final Book book) {
+        btnDelete.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
+            @Override
+            public void onClick(View v) {
+                boolean isDelete = Utils.getInstance(BookActivity.this).deleteBookByID(book.getId());
+                if (isDelete) {
+                    Toast.makeText(BookActivity.this, "Delete Successfully", Toast.LENGTH_SHORT).show();
+                    Intent intent= new Intent(BookActivity.this,MainActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(BookActivity.this, "Something went wrong, please try again!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
     private void setData(Book book) {
         txtBookName.setText(book.getName());
         txtAuthor.setText(book.getAuthor());
@@ -231,5 +251,6 @@ public class BookActivity extends AppCompatActivity {
 
         bookImage = findViewById(R.id.imgBook);
         btnReadBook = findViewById(R.id.btnReadBook);
+        btnDelete = findViewById(R.id.btnDeleteBook);
     }
 }
